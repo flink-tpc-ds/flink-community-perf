@@ -1,7 +1,7 @@
 ## flink-community-perf: 
 Flink benchmark tools of tpc-h/tpc-ds performance tests,depending on the lastest flink-1.9. And we added few patches for
 [Flink TPC-DS competition](https://tianchi.aliyun.com/competition/entrance/231742/introduction?spm=5176.12281949.1003.9.55e44c2aUc3y76),
-the flink branch using in the competition is [flink/tpc-ds-master](https://github.com/flink-tcp-ds/flink-tpcds) which was forked
+the flink branch using in the competition is [flink/tpc-ds-master](https://github.com/flink-tpc-ds/flink-tpcds) which was forked
 from [apache/flink](https://github.com/apache/flink).
    
     
@@ -69,10 +69,10 @@ sh generateTpcdsData.sh 10 0
 ```
 
 ### 2.Optimize Flink code And build
-(1) clone flink code from flink mirror[tpcds-master](https://github.com/flink-tcp-ds/flink),commands:
+(1) clone flink code from flink mirror[tpcds-master](https://github.com/flink-tpc-ds/flink),commands:
 ```
         cd /home/hadoop/flink
-        git remote add flink-tpc-ds git@github.com:flink-tcp-ds/flink.git
+        git remote add flink-tpc-ds git@github.com:flink-tpc-ds/flink.git
         git fetch flink-tpc-ds
         git checkout tpc-ds
 ```

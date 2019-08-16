@@ -2,8 +2,8 @@
 
 ## 1.说明：
 
-Flink团队提供用于比赛的[Flink分支](https://github.com/flink-tcp-ds/flink/tree/tpcds-master)，选手进行Flink 代码优化以提升Flink SQL执行效率，
-组委会提供[Benchmark工具](https://github.com/flink-tcp-ds/flink-community-perf) 供选手自行测试，
+Flink团队提供用于比赛的[Flink分支](https://github.com/flink-tpc-ds/flink/tree/tpcds-master)，选手进行Flink 代码优化以提升Flink SQL执行效率，
+组委会提供[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf) 供选手自行测试，
 比赛阶段，选手将最终优化后的Flink代码打包，通过天池平台提交，天池平台会使用相同的性能测评工具，进行评测、排名。
 
 
@@ -20,13 +20,13 @@ Flink团队提供用于比赛的[Flink分支](https://github.com/flink-tcp-ds/fl
 5.组委会保留对赛题修改的权利。
 
 ## 3.比赛流程
-1.选手从[Benchmark工具](https://github.com/flink-tcp-ds/flink-community-perf) 获取query。
+1.选手从[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf) 获取query。
 
-2.选手通过[Benchmark工具](https://github.com/flink-tcp-ds/flink-community-perf) 生成测试数据，建议利用将数据转换成parquet格式以获取更好的性能。
+2.选手通过[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf) 生成测试数据，建议利用将数据转换成parquet格式以获取更好的性能。
 
-3.选手从[Flink分支](https://github.com/flink-tcp-ds/flink/tree/tpcds-master)拉取Flink代码进行优化。
+3.选手从[Flink分支](https://github.com/flink-tpc-ds/flink/tree/tpcds-master)拉取Flink代码进行优化。
 
-4.本地利用[Benchmark工具](https://github.com/flink-tcp-ds/flink-community-perf)评测优化效果。
+4.本地利用[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf)评测优化效果。
 
 5.选手将优化后的代码打包提交天池平台。
 
@@ -68,8 +68,8 @@ flink工程目录不做细讲，flink-community-perf 工程目录结构如下：
 ```
 
 ## 4.2.工程代码：
-[Flink比赛使用分支](https://github.com/flink-tcp-ds/flink/tree/tpcds-master)：Flink代码是从社区[apache/flink](https://github.com/apache/flink)代码拉取分支，并根据比赛需要新增了一些feature和bug修复，请所有选手基于这份代码进行优化
-[Benchmark工具](https://github.com/flink-tcp-ds/flink-community-perf): Flink 用来做TPC-DS性能测试的工具，提供生成数据集、生成测试query，同时提供了数据集从CSV转parquet的功能，Benchmark工具中有TPC-DS全量99个SQL。
+[Flink比赛使用分支](https://github.com/flink-tpc-ds/flink/tree/tpcds-master)：Flink代码是从社区[apache/flink](https://github.com/apache/flink)代码拉取分支，并根据比赛需要新增了一些feature和bug修复，请所有选手基于这份代码进行优化
+[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf): Flink 用来做TPC-DS性能测试的工具，提供生成数据集、生成测试query，同时提供了数据集从CSV转parquet的功能，Benchmark工具中有TPC-DS全量99个SQL。
 
     
        
@@ -100,10 +100,10 @@ SF1包含两个测试SQL,SF100包含全量99个SQL
 
 
 ### 2.优化FlinK代码
-(1) 拉取比赛使用的Flink代码[tpcds-master](https://github.com/flink-tcp-ds/flink),commands:
+(1) 拉取比赛使用的Flink代码[tpcds-master](https://github.com/flink-tpc-ds/flink),commands:
 ```
     cd /home/hadoop/flink
-    git remote add flink-tpc-ds git@github.com:flink-tcp-ds/flink.git
+    git remote add flink-tpc-ds git@github.com:flink-tpc-ds/flink.git
     git fetch flink-tpc-ds
     git checkout tpcds-master
 ```
