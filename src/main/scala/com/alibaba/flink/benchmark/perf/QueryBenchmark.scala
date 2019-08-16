@@ -12,10 +12,17 @@ import com.alibaba.flink.benchmark.perf.QueryBenchmark.SQL_TYPE.SQL_TYPE
 import scopt.OptionParser
 import java.io.File
 import java.lang.{Long => JLong, String => JString}
+import java.sql.Date
 import java.util.{ArrayList => JArrayList}
 
+import com.alibaba.flink.benchmark.perf.QueryBenchmark.printStats
 import org.apache.flink.core.fs.Path
+import org.apache.flink.table.catalog.ObjectPath
+import org.apache.flink.table.planner.plan.stats.StatisticGenerator
 import org.apache.flink.table.planner.sources.ParquetTableSource
+import org.apache.flink.table.planner.utils.TableStatsConverter
+import org.apache.flink.table.types.DataType
+
 import _root_.scala.collection.JavaConversions._
 
 object QueryBenchmark {
@@ -168,6 +175,30 @@ object QueryBenchmark {
       }
 
       tEnv.registerTableSource(tableName, tableSource)
+
+      val fieldName2DataTypes = schema.getFieldNames.toList.zip(schema.getFieldTypes.toList).toMap
+      val tableStats = params.analyzeTable match {
+        case true => {
+          val start = System.currentTimeMillis()
+          val stats = StatisticGenerator.generateTableStats(tEnv, Array(tableName), Some(schema.getFieldNames))
+          tableStatsMap += (tableName -> stats)
+          val end = System.currentTimeMillis()
+          analyzeCostArray.add(new Tuple2[JString, JLong](tableName, end - start))
+          stats
+        }
+        case _ => {
+          System.out.println("do not existed tableStats:")
+          null
+        }
+      }
+      if (tableStats != null) {
+        printStats(tableStats, tableName, params.scaleFactor, fieldName2DataTypes)
+        val tableStatistics = TableStatsConverter.convertToCatalogTableStatistics(tableStats)
+        val columnStatistics = TableStatsConverter.convertToCatalogColumnStatistics(tableStats)
+        tEnv.getCurrentCatalog
+        tEnv.getCatalog(tEnv.getCurrentCatalog).get().alterTableStatistics(new ObjectPath(tEnv.getCurrentDatabase, tableName), tableStatistics, false)
+        tEnv.getCatalog(tEnv.getCurrentCatalog).get().alterTableColumnStatistics(new ObjectPath(tEnv.getCurrentDatabase, tableName), columnStatistics, false)
+      }
     }
   }
 
@@ -203,6 +234,55 @@ object QueryBenchmark {
         }
     }
     printSummary(params, bestArray)
+  }
+
+  private def printStats(tableStats: TableStats, tableName: String, scaleFactor: Int, fieldName2DataTypes: Map[String, DataType]): Unit = {
+    System.out.println("----------------------------before--------------------------------------------------")
+    val sb = new StringBuilder("val " + tableName.toUpperCase + "_" + scaleFactor + " = new TableStats(");
+    sb.append(tableStats.getRowCount()).append("L, Map[String, ColumnStats](").append("\n")
+    tableStats.getColumnStats.foreach {
+      case (col, st) => sb.append("\"").append(col).append("\" -> new ColumnStats(")
+        .append(st.getNdv).append("L, ")
+        .append(st.getNullCount).append("L, ")
+        .append(st.getAvgLen).append("D, ")
+        .append(st.getMaxLen).append(", ")
+
+
+        st.getMaxValue match {
+          case _: Number => sb.append("convertToNumber(\"")
+          case _: Date => sb.append("Date.valueOf(\"")
+          case _ => Unit
+        }
+        sb.append(st.getMaxValue)
+        st.getMaxValue match {
+          case _: Number => sb.append("\",").append("DataTypes.").append(fieldName2DataTypes.get(col).get.toString).append(")")
+          case _: Date => sb.append("\")")
+          case _: java.lang.Long => sb.append("L")
+          case _: java.lang.Double => sb.append("D")
+          case _ => Unit
+        }
+        sb.append(", ")
+
+
+        st.getMinValue match {
+          case _: Number => sb.append("convertToNumber(\"")
+          case _: Date => sb.append("Date.valueOf(\"")
+          case _ => Unit
+        }
+        sb.append(st.getMinValue)
+        st.getMinValue match {
+          case _: Number => sb.append("\",").append("DataTypes.").append(fieldName2DataTypes.get(col).get.toString).append(")")
+          case _: Date => sb.append("\")")
+          case _: java.lang.Long => sb.append("L")
+          case _: java.lang.Double => sb.append("D")
+          case _ => Unit
+        }
+        sb.append("),\n")
+    }
+    sb.replace(sb.length - 2, sb.length, "")
+    sb.append("))")
+    System.out.println(sb.toString())
+    System.out.println("-----------------------------after-------------------------------------------------")
   }
 
   private def printSummary(
