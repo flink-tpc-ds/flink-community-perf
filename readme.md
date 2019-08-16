@@ -10,16 +10,24 @@ Flink团队提供用于比赛的[Flink分支](https://github.com/flink-tcp-ds/fl
 ## 2.具体赛题
 
 1.比赛使用的测试数据集为100G，用户自行用Benchmark工具生成，生成数据集的随机因子组委会不公开。
+
 2.比赛使用SQL query为TPC-DS工具生成的99个SQL(含变种SQL)，共计103个，组委会从中选择20条SQL进行评测。
+
 3.选手可以进行SQL优化，执行Plan算子优化，引擎优化，调度优化，数据传输优化等，以便让SQL作业执行更快速。
+
 4.选手每天有三次提交作业的机会，每个自然日提供5次代码运行机会。
+
 5.组委会保留对赛题修改的权利。
 
 ## 3.比赛流程
 1.选手从[Benchmark工具](https://github.com/flink-tcp-ds/flink-community-perf) 获取query。
-2.选手通过[Benchmark工具](https://github.com/flink-tcp-ds/flink-community-perf) 生成测试数据。
+
+2.选手通过[Benchmark工具](https://github.com/flink-tcp-ds/flink-community-perf) 生成测试数据，建议利用将数据转换成parquet格式以获取更好的性能。
+
 3.选手从[Flink分支](https://github.com/flink-tcp-ds/flink/tree/tpcds-master)拉取Flink代码进行优化。
+
 4.本地利用[Benchmark工具](https://github.com/flink-tcp-ds/flink-community-perf)评测优化效果。
+
 5.选手将优化后的代码打包提交天池平台。
 
 
