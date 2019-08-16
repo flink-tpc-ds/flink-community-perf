@@ -162,7 +162,7 @@ Intellij 截图:
 ```
 --sqlQueries all
 --numIters 1
---scaleFactor 1
+--scaleFactor 3
 --dataLocation /home/hadoop/flink-community-perf/resource/tpcds/datagen/data/SF1
 --sqlLocation  /home/hadoop/flink-community-perf/resource/tpcds/querygen/queries/SF1  
 --sqlType tpcds 
