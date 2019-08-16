@@ -32,5 +32,5 @@ out/
 tools/flink
 tools/flink-*
 *.dat
-flink-community-perf/resource/tpcds/datagen/data
+resource/tpcds/datagen/data
 

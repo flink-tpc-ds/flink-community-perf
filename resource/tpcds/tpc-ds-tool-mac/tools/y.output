@@ -1,0 +1,2253 @@
+Terminals which are not used
+
+   TOK_PATH
+   WITH
+   '%'
+   '^'
+   UMINUS
+   TCAST
+
+
+Grammar
+
+    0 $accept: workload_spec $end
+
+    1 workload_spec: statement_list
+
+    2 statement_list: statement
+    3               | statement_list statement
+
+    4 statement: include_statement
+    5          | define_statement
+    6          | query_statement
+    7          | dist_statement
+
+    8 include_statement: '#' KW_INCLUDE path
+    9                  | '#' KW_INCLUDE '<' path '>'
+
+   10 dist_statement: KW_DIST TOK_ID ';' dist_argument_list dist_members_list
+
+   11 dist_argument_list: dist_argument
+   12                   | dist_argument_list dist_argument
+
+   13 dist_argument: KW_SET KW_WEIGHTS '=' TOK_INT ';'
+   14              | KW_SET KW_TYPES '=' '(' dist_type_list ')' ';'
+   15              | KW_SET KW_NAMES '=' '(' dist_name_list ':' dist_name_list ')' ';'
+
+   16 dist_type: KW_INT
+   17          | KW_VARCHAR
+   18          | KW_DECIMAL
+
+   19 dist_type_list: /* empty */
+   20               | dist_type
+   21               | dist_type_list ',' dist_type
+
+   22 dist_name_list: TOK_ID
+   23               | dist_name_list ',' TOK_ID
+
+   24 dist_members_list: dist_member
+   25                  | dist_members_list dist_member
+
+   26 dist_member: KW_ADD '(' dist_value_list ':' dist_weight_list ')' ';'
+
+   27 dist_value: TOK_INT
+   28           | TOK_LITERAL
+   29           | TOK_DECIMAL
+
+   30 dist_value_list: dist_value
+   31                | dist_value_list ',' dist_value
+
+   32 dist_weight_list: TOK_INT
+   33                 | dist_value_list ',' TOK_INT
+
+   34 define_statement: KW_DEFINE TOK_ID '=' expr ';'
+   35                 | KW_DEFINE KW_LIMIT '=' TOK_INT ';'
+
+   36 comma_expr_list: expr
+   37                | comma_expr_list ',' expr
+
+   38 expr: TOK_LITERAL
+   39     | TOK_INT
+   40     | function_call
+   41     | keyword_expr
+   42     | '[' keyword_value ']'
+   43     | '[' TOK_ID TOK_INT opt_substitution_suffix ']'
+   44     | '[' TOK_ID opt_substitution_suffix ']'
+   45     | KW_SCALE
+   46     | arithmetic_expr
+
+   47 function_call: function_name '(' comma_expr_list ')'
+   48              | dist_function_name '(' dist_expr_list ')'
+   49              | KW_TEXT '(' replacement_list ')'
+   50              | KW_ROWCOUNT '(' TOK_LITERAL ')'
+   51              | KW_ROWCOUNT '(' TOK_LITERAL ',' TOK_LITERAL ')'
+   52              | KW_SCALE_STEP '(' ')'
+   53              | KW_ULIST '(' expr ',' TOK_INT ')'
+   54              | KW_LIST '(' expr ',' TOK_INT ')'
+   55              | KW_RANGE '(' expr ',' TOK_INT ')'
+
+   56 arithmetic_expr: expr '+' expr
+   57                | expr '-' expr
+   58                | expr '*' expr
+   59                | expr '/' expr
+
+   60 dist_expr_list: expr
+   61               | TOK_ID
+   62               | dist_expr_list ',' expr
+   63               | dist_expr_list ',' TOK_ID
+
+   64 function_name: KW_DATE
+   65              | KW_RANDOM
+
+   66 dist_function_name: KW_DIST
+   67                   | KW_DISTMEMBER
+   68                   | KW_DISTWEIGHT
+
+   69 keyword_expr: KW_UNIFORM
+   70             | KW_SALES
+   71             | KW_RETURNS
+
+   72 keyword_value: KW_QUERY
+   73              | KW_TEMPLATE
+   74              | KW_STREAM
+   75              | KW_SEED
+
+   76 replacement_list: replacement
+   77                 | replacement_list ',' replacement
+
+   78 replacement: '{' TOK_LITERAL ',' TOK_INT '}'
+
+   79 query_statement: query_component_list ';'
+
+   80 query_component_list: substitution
+   81                     | TOK_SQL
+   82                     | query_component_list substitution
+   83                     | query_component_list TOK_SQL
+
+   84 substitution: '[' TOK_ID opt_substitution_suffix ']'
+   85             | '[' TOK_ID TOK_INT opt_substitution_suffix ']'
+   86             | '[' KW_QUERY ']'
+   87             | '[' KW_STREAM ']'
+   88             | '[' KW_TEMPLATE ']'
+   89             | '[' KW_SEED ']'
+   90             | '[' KW_LIMITA ']'
+   91             | '[' KW_LIMITB ']'
+   92             | '[' KW_LIMITC ']'
+
+   93 opt_substitution_suffix: /* empty */
+   94                        | '.' KW_BEGIN
+   95                        | '.' KW_END
+   96                        | '.' TOK_INT
+
+   97 path: TOK_LITERAL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'#' (35) 8 9
+'%' (37)
+'(' (40) 14 15 26 47 48 49 50 51 52 53 54 55
+')' (41) 14 15 26 47 48 49 50 51 52 53 54 55
+'*' (42) 58
+'+' (43) 56
+',' (44) 21 23 31 33 37 51 53 54 55 62 63 77 78
+'-' (45) 57
+'.' (46) 94 95 96
+'/' (47) 59
+':' (58) 15 26
+';' (59) 10 13 14 15 26 34 35 79
+'<' (60) 9
+'=' (61) 13 14 15 34 35
+'>' (62) 9
+'[' (91) 42 43 44 84 85 86 87 88 89 90 91 92
+']' (93) 42 43 44 84 85 86 87 88 89 90 91 92
+'^' (94)
+'{' (123) 78
+'}' (125) 78
+error (256)
+TOK_INT (258) 13 27 32 33 35 39 43 53 54 55 78 85 96
+TOK_LITERAL (259) 28 38 50 51 78 97
+TOK_PATH (260)
+TOK_DECIMAL (261) 29
+TOK_ID (262) 10 22 23 34 43 44 61 63 84 85
+TOK_SQL (263) 81 83
+KW_DEFINE (264) 34 35
+KW_RANDOM (265) 65
+KW_UNIFORM (266) 69
+KW_RANGE (267) 55
+KW_DATE (268) 64
+KW_INCLUDE (269) 8 9
+KW_TEXT (270) 49
+KW_DIST (271) 10 66
+KW_LIST (272) 54
+KW_ROWCOUNT (273) 50 51
+KW_BEGIN (274) 94
+KW_END (275) 95
+KW_SALES (276) 70
+KW_RETURNS (277) 71
+KW_DISTMEMBER (278) 67
+KW_DISTWEIGHT (279) 68
+KW_QUERY (280) 72 86
+KW_STREAM (281) 74 87
+KW_TEMPLATE (282) 73 88
+KW_SEED (283) 75 89
+KW_SCALE (284) 45
+KW_SCALE_STEP (285) 52
+KW_SET (286) 13 14 15
+KW_ADD (287) 26
+KW_NAMES (288) 15
+KW_TYPES (289) 14
+KW_WEIGHTS (290) 13
+KW_INT (291) 16
+KW_VARCHAR (292) 17
+KW_DECIMAL (293) 18
+KW_LIMIT (294) 35
+KW_LIMITA (295) 90
+KW_LIMITB (296) 91
+KW_LIMITC (297) 92
+KW_ULIST (298) 53
+WITH (299)
+UMINUS (300)
+TCAST (301)
+
+
+Nonterminals, with rules where they appear
+
+$accept (67)
+    on left: 0
+workload_spec (68)
+    on left: 1, on right: 0
+statement_list (69)
+    on left: 2 3, on right: 1 3
+statement (70)
+    on left: 4 5 6 7, on right: 2 3
+include_statement (71)
+    on left: 8 9, on right: 4
+dist_statement (72)
+    on left: 10, on right: 7
+dist_argument_list (73)
+    on left: 11 12, on right: 10 12
+dist_argument (74)
+    on left: 13 14 15, on right: 11 12
+dist_type (75)
+    on left: 16 17 18, on right: 20 21
+dist_type_list (76)
+    on left: 19 20 21, on right: 14 21
+dist_name_list (77)
+    on left: 22 23, on right: 15 23
+dist_members_list (78)
+    on left: 24 25, on right: 10 25
+dist_member (79)
+    on left: 26, on right: 24 25
+dist_value (80)
+    on left: 27 28 29, on right: 30 31
+dist_value_list (81)
+    on left: 30 31, on right: 26 31 33
+dist_weight_list (82)
+    on left: 32 33, on right: 26
+define_statement (83)
+    on left: 34 35, on right: 5
+comma_expr_list (84)
+    on left: 36 37, on right: 37 47
+expr (85)
+    on left: 38 39 40 41 42 43 44 45 46, on right: 34 36 37 53 54 55
+    56 57 58 59 60 62
+function_call (86)
+    on left: 47 48 49 50 51 52 53 54 55, on right: 40
+arithmetic_expr (87)
+    on left: 56 57 58 59, on right: 46
+dist_expr_list (88)
+    on left: 60 61 62 63, on right: 48 62 63
+function_name (89)
+    on left: 64 65, on right: 47
+dist_function_name (90)
+    on left: 66 67 68, on right: 48
+keyword_expr (91)
+    on left: 69 70 71, on right: 41
+keyword_value (92)
+    on left: 72 73 74 75, on right: 42
+replacement_list (93)
+    on left: 76 77, on right: 49 77
+replacement (94)
+    on left: 78, on right: 76 77
+query_statement (95)
+    on left: 79, on right: 6
+query_component_list (96)
+    on left: 80 81 82 83, on right: 79 82 83
+substitution (97)
+    on left: 84 85 86 87 88 89 90 91 92, on right: 80 82
+opt_substitution_suffix (98)
+    on left: 93 94 95 96, on right: 43 44 84 85
+path (99)
+    on left: 97, on right: 8 9
+
+
+state 0
+
+    0 $accept: . workload_spec $end
+
+    TOK_SQL    shift, and go to state 1
+    KW_DEFINE  shift, and go to state 2
+    KW_DIST    shift, and go to state 3
+    '['        shift, and go to state 4
+    '#'        shift, and go to state 5
+
+    workload_spec         go to state 6
+    statement_list        go to state 7
+    statement             go to state 8
+    include_statement     go to state 9
+    dist_statement        go to state 10
+    define_statement      go to state 11
+    query_statement       go to state 12
+    query_component_list  go to state 13
+    substitution          go to state 14
+
+
+state 1
+
+   81 query_component_list: TOK_SQL .
+
+    $default  reduce using rule 81 (query_component_list)
+
+
+state 2
+
+   34 define_statement: KW_DEFINE . TOK_ID '=' expr ';'
+   35                 | KW_DEFINE . KW_LIMIT '=' TOK_INT ';'
+
+    TOK_ID    shift, and go to state 15
+    KW_LIMIT  shift, and go to state 16
+
+
+state 3
+
+   10 dist_statement: KW_DIST . TOK_ID ';' dist_argument_list dist_members_list
+
+    TOK_ID  shift, and go to state 17
+
+
+state 4
+
+   84 substitution: '[' . TOK_ID opt_substitution_suffix ']'
+   85             | '[' . TOK_ID TOK_INT opt_substitution_suffix ']'
+   86             | '[' . KW_QUERY ']'
+   87             | '[' . KW_STREAM ']'
+   88             | '[' . KW_TEMPLATE ']'
+   89             | '[' . KW_SEED ']'
+   90             | '[' . KW_LIMITA ']'
+   91             | '[' . KW_LIMITB ']'
+   92             | '[' . KW_LIMITC ']'
+
+    TOK_ID       shift, and go to state 18
+    KW_QUERY     shift, and go to state 19
+    KW_STREAM    shift, and go to state 20
+    KW_TEMPLATE  shift, and go to state 21
+    KW_SEED      shift, and go to state 22
+    KW_LIMITA    shift, and go to state 23
+    KW_LIMITB    shift, and go to state 24
+    KW_LIMITC    shift, and go to state 25
+
+
+state 5
+
+    8 include_statement: '#' . KW_INCLUDE path
+    9                  | '#' . KW_INCLUDE '<' path '>'
+
+    KW_INCLUDE  shift, and go to state 26
+
+
+state 6
+
+    0 $accept: workload_spec . $end
+
+    $end  shift, and go to state 27
+
+
+state 7
+
+    1 workload_spec: statement_list .
+    3 statement_list: statement_list . statement
+
+    TOK_SQL    shift, and go to state 1
+    KW_DEFINE  shift, and go to state 2
+    KW_DIST    shift, and go to state 3
+    '['        shift, and go to state 4
+    '#'        shift, and go to state 5
+
+    $default  reduce using rule 1 (workload_spec)
+
+    statement             go to state 28
+    include_statement     go to state 9
+    dist_statement        go to state 10
+    define_statement      go to state 11
+    query_statement       go to state 12
+    query_component_list  go to state 13
+    substitution          go to state 14
+
+
+state 8
+
+    2 statement_list: statement .
+
+    $default  reduce using rule 2 (statement_list)
+
+
+state 9
+
+    4 statement: include_statement .
+
+    $default  reduce using rule 4 (statement)
+
+
+state 10
+
+    7 statement: dist_statement .
+
+    $default  reduce using rule 7 (statement)
+
+
+state 11
+
+    5 statement: define_statement .
+
+    $default  reduce using rule 5 (statement)
+
+
+state 12
+
+    6 statement: query_statement .
+
+    $default  reduce using rule 6 (statement)
+
+
+state 13
+
+   79 query_statement: query_component_list . ';'
+   82 query_component_list: query_component_list . substitution
+   83                     | query_component_list . TOK_SQL
+
+    TOK_SQL  shift, and go to state 29
+    '['      shift, and go to state 4
+    ';'      shift, and go to state 30
+
+    substitution  go to state 31
+
+
+state 14
+
+   80 query_component_list: substitution .
+
+    $default  reduce using rule 80 (query_component_list)
+
+
+state 15
+
+   34 define_statement: KW_DEFINE TOK_ID . '=' expr ';'
+
+    '='  shift, and go to state 32
+
+
+state 16
+
+   35 define_statement: KW_DEFINE KW_LIMIT . '=' TOK_INT ';'
+
+    '='  shift, and go to state 33
+
+
+state 17
+
+   10 dist_statement: KW_DIST TOK_ID . ';' dist_argument_list dist_members_list
+
+    ';'  shift, and go to state 34
+
+
+state 18
+
+   84 substitution: '[' TOK_ID . opt_substitution_suffix ']'
+   85             | '[' TOK_ID . TOK_INT opt_substitution_suffix ']'
+
+    TOK_INT  shift, and go to state 35
+    '.'      shift, and go to state 36
+
+    $default  reduce using rule 93 (opt_substitution_suffix)
+
+    opt_substitution_suffix  go to state 37
+
+
+state 19
+
+   86 substitution: '[' KW_QUERY . ']'
+
+    ']'  shift, and go to state 38
+
+
+state 20
+
+   87 substitution: '[' KW_STREAM . ']'
+
+    ']'  shift, and go to state 39
+
+
+state 21
+
+   88 substitution: '[' KW_TEMPLATE . ']'
+
+    ']'  shift, and go to state 40
+
+
+state 22
+
+   89 substitution: '[' KW_SEED . ']'
+
+    ']'  shift, and go to state 41
+
+
+state 23
+
+   90 substitution: '[' KW_LIMITA . ']'
+
+    ']'  shift, and go to state 42
+
+
+state 24
+
+   91 substitution: '[' KW_LIMITB . ']'
+
+    ']'  shift, and go to state 43
+
+
+state 25
+
+   92 substitution: '[' KW_LIMITC . ']'
+
+    ']'  shift, and go to state 44
+
+
+state 26
+
+    8 include_statement: '#' KW_INCLUDE . path
+    9                  | '#' KW_INCLUDE . '<' path '>'
+
+    TOK_LITERAL  shift, and go to state 45
+    '<'          shift, and go to state 46
+
+    path  go to state 47
+
+
+state 27
+
+    0 $accept: workload_spec $end .
+
+    $default  accept
+
+
+state 28
+
+    3 statement_list: statement_list statement .
+
+    $default  reduce using rule 3 (statement_list)
+
+
+state 29
+
+   83 query_component_list: query_component_list TOK_SQL .
+
+    $default  reduce using rule 83 (query_component_list)
+
+
+state 30
+
+   79 query_statement: query_component_list ';' .
+
+    $default  reduce using rule 79 (query_statement)
+
+
+state 31
+
+   82 query_component_list: query_component_list substitution .
+
+    $default  reduce using rule 82 (query_component_list)
+
+
+state 32
+
+   34 define_statement: KW_DEFINE TOK_ID '=' . expr ';'
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    expr                go to state 66
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 33
+
+   35 define_statement: KW_DEFINE KW_LIMIT '=' . TOK_INT ';'
+
+    TOK_INT  shift, and go to state 72
+
+
+state 34
+
+   10 dist_statement: KW_DIST TOK_ID ';' . dist_argument_list dist_members_list
+
+    KW_SET  shift, and go to state 73
+
+    dist_argument_list  go to state 74
+    dist_argument       go to state 75
+
+
+state 35
+
+   85 substitution: '[' TOK_ID TOK_INT . opt_substitution_suffix ']'
+
+    '.'  shift, and go to state 36
+
+    $default  reduce using rule 93 (opt_substitution_suffix)
+
+    opt_substitution_suffix  go to state 76
+
+
+state 36
+
+   94 opt_substitution_suffix: '.' . KW_BEGIN
+   95                        | '.' . KW_END
+   96                        | '.' . TOK_INT
+
+    TOK_INT   shift, and go to state 77
+    KW_BEGIN  shift, and go to state 78
+    KW_END    shift, and go to state 79
+
+
+state 37
+
+   84 substitution: '[' TOK_ID opt_substitution_suffix . ']'
+
+    ']'  shift, and go to state 80
+
+
+state 38
+
+   86 substitution: '[' KW_QUERY ']' .
+
+    $default  reduce using rule 86 (substitution)
+
+
+state 39
+
+   87 substitution: '[' KW_STREAM ']' .
+
+    $default  reduce using rule 87 (substitution)
+
+
+state 40
+
+   88 substitution: '[' KW_TEMPLATE ']' .
+
+    $default  reduce using rule 88 (substitution)
+
+
+state 41
+
+   89 substitution: '[' KW_SEED ']' .
+
+    $default  reduce using rule 89 (substitution)
+
+
+state 42
+
+   90 substitution: '[' KW_LIMITA ']' .
+
+    $default  reduce using rule 90 (substitution)
+
+
+state 43
+
+   91 substitution: '[' KW_LIMITB ']' .
+
+    $default  reduce using rule 91 (substitution)
+
+
+state 44
+
+   92 substitution: '[' KW_LIMITC ']' .
+
+    $default  reduce using rule 92 (substitution)
+
+
+state 45
+
+   97 path: TOK_LITERAL .
+
+    $default  reduce using rule 97 (path)
+
+
+state 46
+
+    9 include_statement: '#' KW_INCLUDE '<' . path '>'
+
+    TOK_LITERAL  shift, and go to state 45
+
+    path  go to state 81
+
+
+state 47
+
+    8 include_statement: '#' KW_INCLUDE path .
+
+    $default  reduce using rule 8 (include_statement)
+
+
+state 48
+
+   39 expr: TOK_INT .
+
+    $default  reduce using rule 39 (expr)
+
+
+state 49
+
+   38 expr: TOK_LITERAL .
+
+    $default  reduce using rule 38 (expr)
+
+
+state 50
+
+   65 function_name: KW_RANDOM .
+
+    $default  reduce using rule 65 (function_name)
+
+
+state 51
+
+   69 keyword_expr: KW_UNIFORM .
+
+    $default  reduce using rule 69 (keyword_expr)
+
+
+state 52
+
+   55 function_call: KW_RANGE . '(' expr ',' TOK_INT ')'
+
+    '('  shift, and go to state 82
+
+
+state 53
+
+   64 function_name: KW_DATE .
+
+    $default  reduce using rule 64 (function_name)
+
+
+state 54
+
+   49 function_call: KW_TEXT . '(' replacement_list ')'
+
+    '('  shift, and go to state 83
+
+
+state 55
+
+   66 dist_function_name: KW_DIST .
+
+    $default  reduce using rule 66 (dist_function_name)
+
+
+state 56
+
+   54 function_call: KW_LIST . '(' expr ',' TOK_INT ')'
+
+    '('  shift, and go to state 84
+
+
+state 57
+
+   50 function_call: KW_ROWCOUNT . '(' TOK_LITERAL ')'
+   51              | KW_ROWCOUNT . '(' TOK_LITERAL ',' TOK_LITERAL ')'
+
+    '('  shift, and go to state 85
+
+
+state 58
+
+   70 keyword_expr: KW_SALES .
+
+    $default  reduce using rule 70 (keyword_expr)
+
+
+state 59
+
+   71 keyword_expr: KW_RETURNS .
+
+    $default  reduce using rule 71 (keyword_expr)
+
+
+state 60
+
+   67 dist_function_name: KW_DISTMEMBER .
+
+    $default  reduce using rule 67 (dist_function_name)
+
+
+state 61
+
+   68 dist_function_name: KW_DISTWEIGHT .
+
+    $default  reduce using rule 68 (dist_function_name)
+
+
+state 62
+
+   45 expr: KW_SCALE .
+
+    $default  reduce using rule 45 (expr)
+
+
+state 63
+
+   52 function_call: KW_SCALE_STEP . '(' ')'
+
+    '('  shift, and go to state 86
+
+
+state 64
+
+   53 function_call: KW_ULIST . '(' expr ',' TOK_INT ')'
+
+    '('  shift, and go to state 87
+
+
+state 65
+
+   42 expr: '[' . keyword_value ']'
+   43     | '[' . TOK_ID TOK_INT opt_substitution_suffix ']'
+   44     | '[' . TOK_ID opt_substitution_suffix ']'
+
+    TOK_ID       shift, and go to state 88
+    KW_QUERY     shift, and go to state 89
+    KW_STREAM    shift, and go to state 90
+    KW_TEMPLATE  shift, and go to state 91
+    KW_SEED      shift, and go to state 92
+
+    keyword_value  go to state 93
+
+
+state 66
+
+   34 define_statement: KW_DEFINE TOK_ID '=' expr . ';'
+   56 arithmetic_expr: expr . '+' expr
+   57                | expr . '-' expr
+   58                | expr . '*' expr
+   59                | expr . '/' expr
+
+    '+'  shift, and go to state 94
+    '-'  shift, and go to state 95
+    '*'  shift, and go to state 96
+    '/'  shift, and go to state 97
+    ';'  shift, and go to state 98
+
+
+state 67
+
+   40 expr: function_call .
+
+    $default  reduce using rule 40 (expr)
+
+
+state 68
+
+   46 expr: arithmetic_expr .
+
+    $default  reduce using rule 46 (expr)
+
+
+state 69
+
+   47 function_call: function_name . '(' comma_expr_list ')'
+
+    '('  shift, and go to state 99
+
+
+state 70
+
+   48 function_call: dist_function_name . '(' dist_expr_list ')'
+
+    '('  shift, and go to state 100
+
+
+state 71
+
+   41 expr: keyword_expr .
+
+    $default  reduce using rule 41 (expr)
+
+
+state 72
+
+   35 define_statement: KW_DEFINE KW_LIMIT '=' TOK_INT . ';'
+
+    ';'  shift, and go to state 101
+
+
+state 73
+
+   13 dist_argument: KW_SET . KW_WEIGHTS '=' TOK_INT ';'
+   14              | KW_SET . KW_TYPES '=' '(' dist_type_list ')' ';'
+   15              | KW_SET . KW_NAMES '=' '(' dist_name_list ':' dist_name_list ')' ';'
+
+    KW_NAMES    shift, and go to state 102
+    KW_TYPES    shift, and go to state 103
+    KW_WEIGHTS  shift, and go to state 104
+
+
+state 74
+
+   10 dist_statement: KW_DIST TOK_ID ';' dist_argument_list . dist_members_list
+   12 dist_argument_list: dist_argument_list . dist_argument
+
+    KW_SET  shift, and go to state 73
+    KW_ADD  shift, and go to state 105
+
+    dist_argument      go to state 106
+    dist_members_list  go to state 107
+    dist_member        go to state 108
+
+
+state 75
+
+   11 dist_argument_list: dist_argument .
+
+    $default  reduce using rule 11 (dist_argument_list)
+
+
+state 76
+
+   85 substitution: '[' TOK_ID TOK_INT opt_substitution_suffix . ']'
+
+    ']'  shift, and go to state 109
+
+
+state 77
+
+   96 opt_substitution_suffix: '.' TOK_INT .
+
+    $default  reduce using rule 96 (opt_substitution_suffix)
+
+
+state 78
+
+   94 opt_substitution_suffix: '.' KW_BEGIN .
+
+    $default  reduce using rule 94 (opt_substitution_suffix)
+
+
+state 79
+
+   95 opt_substitution_suffix: '.' KW_END .
+
+    $default  reduce using rule 95 (opt_substitution_suffix)
+
+
+state 80
+
+   84 substitution: '[' TOK_ID opt_substitution_suffix ']' .
+
+    $default  reduce using rule 84 (substitution)
+
+
+state 81
+
+    9 include_statement: '#' KW_INCLUDE '<' path . '>'
+
+    '>'  shift, and go to state 110
+
+
+state 82
+
+   55 function_call: KW_RANGE '(' . expr ',' TOK_INT ')'
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    expr                go to state 111
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 83
+
+   49 function_call: KW_TEXT '(' . replacement_list ')'
+
+    '{'  shift, and go to state 112
+
+    replacement_list  go to state 113
+    replacement       go to state 114
+
+
+state 84
+
+   54 function_call: KW_LIST '(' . expr ',' TOK_INT ')'
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    expr                go to state 115
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 85
+
+   50 function_call: KW_ROWCOUNT '(' . TOK_LITERAL ')'
+   51              | KW_ROWCOUNT '(' . TOK_LITERAL ',' TOK_LITERAL ')'
+
+    TOK_LITERAL  shift, and go to state 116
+
+
+state 86
+
+   52 function_call: KW_SCALE_STEP '(' . ')'
+
+    ')'  shift, and go to state 117
+
+
+state 87
+
+   53 function_call: KW_ULIST '(' . expr ',' TOK_INT ')'
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    expr                go to state 118
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 88
+
+   43 expr: '[' TOK_ID . TOK_INT opt_substitution_suffix ']'
+   44     | '[' TOK_ID . opt_substitution_suffix ']'
+
+    TOK_INT  shift, and go to state 119
+    '.'      shift, and go to state 36
+
+    $default  reduce using rule 93 (opt_substitution_suffix)
+
+    opt_substitution_suffix  go to state 120
+
+
+state 89
+
+   72 keyword_value: KW_QUERY .
+
+    $default  reduce using rule 72 (keyword_value)
+
+
+state 90
+
+   74 keyword_value: KW_STREAM .
+
+    $default  reduce using rule 74 (keyword_value)
+
+
+state 91
+
+   73 keyword_value: KW_TEMPLATE .
+
+    $default  reduce using rule 73 (keyword_value)
+
+
+state 92
+
+   75 keyword_value: KW_SEED .
+
+    $default  reduce using rule 75 (keyword_value)
+
+
+state 93
+
+   42 expr: '[' keyword_value . ']'
+
+    ']'  shift, and go to state 121
+
+
+state 94
+
+   56 arithmetic_expr: expr '+' . expr
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    expr                go to state 122
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 95
+
+   57 arithmetic_expr: expr '-' . expr
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    expr                go to state 123
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 96
+
+   58 arithmetic_expr: expr '*' . expr
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    expr                go to state 124
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 97
+
+   59 arithmetic_expr: expr '/' . expr
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    expr                go to state 125
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 98
+
+   34 define_statement: KW_DEFINE TOK_ID '=' expr ';' .
+
+    $default  reduce using rule 34 (define_statement)
+
+
+state 99
+
+   47 function_call: function_name '(' . comma_expr_list ')'
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    comma_expr_list     go to state 126
+    expr                go to state 127
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 100
+
+   48 function_call: dist_function_name '(' . dist_expr_list ')'
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    TOK_ID         shift, and go to state 128
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    expr                go to state 129
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    dist_expr_list      go to state 130
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 101
+
+   35 define_statement: KW_DEFINE KW_LIMIT '=' TOK_INT ';' .
+
+    $default  reduce using rule 35 (define_statement)
+
+
+state 102
+
+   15 dist_argument: KW_SET KW_NAMES . '=' '(' dist_name_list ':' dist_name_list ')' ';'
+
+    '='  shift, and go to state 131
+
+
+state 103
+
+   14 dist_argument: KW_SET KW_TYPES . '=' '(' dist_type_list ')' ';'
+
+    '='  shift, and go to state 132
+
+
+state 104
+
+   13 dist_argument: KW_SET KW_WEIGHTS . '=' TOK_INT ';'
+
+    '='  shift, and go to state 133
+
+
+state 105
+
+   26 dist_member: KW_ADD . '(' dist_value_list ':' dist_weight_list ')' ';'
+
+    '('  shift, and go to state 134
+
+
+state 106
+
+   12 dist_argument_list: dist_argument_list dist_argument .
+
+    $default  reduce using rule 12 (dist_argument_list)
+
+
+state 107
+
+   10 dist_statement: KW_DIST TOK_ID ';' dist_argument_list dist_members_list .
+   25 dist_members_list: dist_members_list . dist_member
+
+    KW_ADD  shift, and go to state 105
+
+    $default  reduce using rule 10 (dist_statement)
+
+    dist_member  go to state 135
+
+
+state 108
+
+   24 dist_members_list: dist_member .
+
+    $default  reduce using rule 24 (dist_members_list)
+
+
+state 109
+
+   85 substitution: '[' TOK_ID TOK_INT opt_substitution_suffix ']' .
+
+    $default  reduce using rule 85 (substitution)
+
+
+state 110
+
+    9 include_statement: '#' KW_INCLUDE '<' path '>' .
+
+    $default  reduce using rule 9 (include_statement)
+
+
+state 111
+
+   55 function_call: KW_RANGE '(' expr . ',' TOK_INT ')'
+   56 arithmetic_expr: expr . '+' expr
+   57                | expr . '-' expr
+   58                | expr . '*' expr
+   59                | expr . '/' expr
+
+    '+'  shift, and go to state 94
+    '-'  shift, and go to state 95
+    '*'  shift, and go to state 96
+    '/'  shift, and go to state 97
+    ','  shift, and go to state 136
+
+
+state 112
+
+   78 replacement: '{' . TOK_LITERAL ',' TOK_INT '}'
+
+    TOK_LITERAL  shift, and go to state 137
+
+
+state 113
+
+   49 function_call: KW_TEXT '(' replacement_list . ')'
+   77 replacement_list: replacement_list . ',' replacement
+
+    ')'  shift, and go to state 138
+    ','  shift, and go to state 139
+
+
+state 114
+
+   76 replacement_list: replacement .
+
+    $default  reduce using rule 76 (replacement_list)
+
+
+state 115
+
+   54 function_call: KW_LIST '(' expr . ',' TOK_INT ')'
+   56 arithmetic_expr: expr . '+' expr
+   57                | expr . '-' expr
+   58                | expr . '*' expr
+   59                | expr . '/' expr
+
+    '+'  shift, and go to state 94
+    '-'  shift, and go to state 95
+    '*'  shift, and go to state 96
+    '/'  shift, and go to state 97
+    ','  shift, and go to state 140
+
+
+state 116
+
+   50 function_call: KW_ROWCOUNT '(' TOK_LITERAL . ')'
+   51              | KW_ROWCOUNT '(' TOK_LITERAL . ',' TOK_LITERAL ')'
+
+    ')'  shift, and go to state 141
+    ','  shift, and go to state 142
+
+
+state 117
+
+   52 function_call: KW_SCALE_STEP '(' ')' .
+
+    $default  reduce using rule 52 (function_call)
+
+
+state 118
+
+   53 function_call: KW_ULIST '(' expr . ',' TOK_INT ')'
+   56 arithmetic_expr: expr . '+' expr
+   57                | expr . '-' expr
+   58                | expr . '*' expr
+   59                | expr . '/' expr
+
+    '+'  shift, and go to state 94
+    '-'  shift, and go to state 95
+    '*'  shift, and go to state 96
+    '/'  shift, and go to state 97
+    ','  shift, and go to state 143
+
+
+state 119
+
+   43 expr: '[' TOK_ID TOK_INT . opt_substitution_suffix ']'
+
+    '.'  shift, and go to state 36
+
+    $default  reduce using rule 93 (opt_substitution_suffix)
+
+    opt_substitution_suffix  go to state 144
+
+
+state 120
+
+   44 expr: '[' TOK_ID opt_substitution_suffix . ']'
+
+    ']'  shift, and go to state 145
+
+
+state 121
+
+   42 expr: '[' keyword_value ']' .
+
+    $default  reduce using rule 42 (expr)
+
+
+state 122
+
+   56 arithmetic_expr: expr . '+' expr
+   56                | expr '+' expr .
+   57                | expr . '-' expr
+   58                | expr . '*' expr
+   59                | expr . '/' expr
+
+    '*'  shift, and go to state 96
+    '/'  shift, and go to state 97
+
+    $default  reduce using rule 56 (arithmetic_expr)
+
+
+state 123
+
+   56 arithmetic_expr: expr . '+' expr
+   57                | expr . '-' expr
+   57                | expr '-' expr .
+   58                | expr . '*' expr
+   59                | expr . '/' expr
+
+    '*'  shift, and go to state 96
+    '/'  shift, and go to state 97
+
+    $default  reduce using rule 57 (arithmetic_expr)
+
+
+state 124
+
+   56 arithmetic_expr: expr . '+' expr
+   57                | expr . '-' expr
+   58                | expr . '*' expr
+   58                | expr '*' expr .
+   59                | expr . '/' expr
+
+    $default  reduce using rule 58 (arithmetic_expr)
+
+
+state 125
+
+   56 arithmetic_expr: expr . '+' expr
+   57                | expr . '-' expr
+   58                | expr . '*' expr
+   59                | expr . '/' expr
+   59                | expr '/' expr .
+
+    $default  reduce using rule 59 (arithmetic_expr)
+
+
+state 126
+
+   37 comma_expr_list: comma_expr_list . ',' expr
+   47 function_call: function_name '(' comma_expr_list . ')'
+
+    ')'  shift, and go to state 146
+    ','  shift, and go to state 147
+
+
+state 127
+
+   36 comma_expr_list: expr .
+   56 arithmetic_expr: expr . '+' expr
+   57                | expr . '-' expr
+   58                | expr . '*' expr
+   59                | expr . '/' expr
+
+    '+'  shift, and go to state 94
+    '-'  shift, and go to state 95
+    '*'  shift, and go to state 96
+    '/'  shift, and go to state 97
+
+    $default  reduce using rule 36 (comma_expr_list)
+
+
+state 128
+
+   61 dist_expr_list: TOK_ID .
+
+    $default  reduce using rule 61 (dist_expr_list)
+
+
+state 129
+
+   56 arithmetic_expr: expr . '+' expr
+   57                | expr . '-' expr
+   58                | expr . '*' expr
+   59                | expr . '/' expr
+   60 dist_expr_list: expr .
+
+    '+'  shift, and go to state 94
+    '-'  shift, and go to state 95
+    '*'  shift, and go to state 96
+    '/'  shift, and go to state 97
+
+    $default  reduce using rule 60 (dist_expr_list)
+
+
+state 130
+
+   48 function_call: dist_function_name '(' dist_expr_list . ')'
+   62 dist_expr_list: dist_expr_list . ',' expr
+   63               | dist_expr_list . ',' TOK_ID
+
+    ')'  shift, and go to state 148
+    ','  shift, and go to state 149
+
+
+state 131
+
+   15 dist_argument: KW_SET KW_NAMES '=' . '(' dist_name_list ':' dist_name_list ')' ';'
+
+    '('  shift, and go to state 150
+
+
+state 132
+
+   14 dist_argument: KW_SET KW_TYPES '=' . '(' dist_type_list ')' ';'
+
+    '('  shift, and go to state 151
+
+
+state 133
+
+   13 dist_argument: KW_SET KW_WEIGHTS '=' . TOK_INT ';'
+
+    TOK_INT  shift, and go to state 152
+
+
+state 134
+
+   26 dist_member: KW_ADD '(' . dist_value_list ':' dist_weight_list ')' ';'
+
+    TOK_INT      shift, and go to state 153
+    TOK_LITERAL  shift, and go to state 154
+    TOK_DECIMAL  shift, and go to state 155
+
+    dist_value       go to state 156
+    dist_value_list  go to state 157
+
+
+state 135
+
+   25 dist_members_list: dist_members_list dist_member .
+
+    $default  reduce using rule 25 (dist_members_list)
+
+
+state 136
+
+   55 function_call: KW_RANGE '(' expr ',' . TOK_INT ')'
+
+    TOK_INT  shift, and go to state 158
+
+
+state 137
+
+   78 replacement: '{' TOK_LITERAL . ',' TOK_INT '}'
+
+    ','  shift, and go to state 159
+
+
+state 138
+
+   49 function_call: KW_TEXT '(' replacement_list ')' .
+
+    $default  reduce using rule 49 (function_call)
+
+
+state 139
+
+   77 replacement_list: replacement_list ',' . replacement
+
+    '{'  shift, and go to state 112
+
+    replacement  go to state 160
+
+
+state 140
+
+   54 function_call: KW_LIST '(' expr ',' . TOK_INT ')'
+
+    TOK_INT  shift, and go to state 161
+
+
+state 141
+
+   50 function_call: KW_ROWCOUNT '(' TOK_LITERAL ')' .
+
+    $default  reduce using rule 50 (function_call)
+
+
+state 142
+
+   51 function_call: KW_ROWCOUNT '(' TOK_LITERAL ',' . TOK_LITERAL ')'
+
+    TOK_LITERAL  shift, and go to state 162
+
+
+state 143
+
+   53 function_call: KW_ULIST '(' expr ',' . TOK_INT ')'
+
+    TOK_INT  shift, and go to state 163
+
+
+state 144
+
+   43 expr: '[' TOK_ID TOK_INT opt_substitution_suffix . ']'
+
+    ']'  shift, and go to state 164
+
+
+state 145
+
+   44 expr: '[' TOK_ID opt_substitution_suffix ']' .
+
+    $default  reduce using rule 44 (expr)
+
+
+state 146
+
+   47 function_call: function_name '(' comma_expr_list ')' .
+
+    $default  reduce using rule 47 (function_call)
+
+
+state 147
+
+   37 comma_expr_list: comma_expr_list ',' . expr
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    expr                go to state 165
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 148
+
+   48 function_call: dist_function_name '(' dist_expr_list ')' .
+
+    $default  reduce using rule 48 (function_call)
+
+
+state 149
+
+   62 dist_expr_list: dist_expr_list ',' . expr
+   63               | dist_expr_list ',' . TOK_ID
+
+    TOK_INT        shift, and go to state 48
+    TOK_LITERAL    shift, and go to state 49
+    TOK_ID         shift, and go to state 166
+    KW_RANDOM      shift, and go to state 50
+    KW_UNIFORM     shift, and go to state 51
+    KW_RANGE       shift, and go to state 52
+    KW_DATE        shift, and go to state 53
+    KW_TEXT        shift, and go to state 54
+    KW_DIST        shift, and go to state 55
+    KW_LIST        shift, and go to state 56
+    KW_ROWCOUNT    shift, and go to state 57
+    KW_SALES       shift, and go to state 58
+    KW_RETURNS     shift, and go to state 59
+    KW_DISTMEMBER  shift, and go to state 60
+    KW_DISTWEIGHT  shift, and go to state 61
+    KW_SCALE       shift, and go to state 62
+    KW_SCALE_STEP  shift, and go to state 63
+    KW_ULIST       shift, and go to state 64
+    '['            shift, and go to state 65
+
+    expr                go to state 167
+    function_call       go to state 67
+    arithmetic_expr     go to state 68
+    function_name       go to state 69
+    dist_function_name  go to state 70
+    keyword_expr        go to state 71
+
+
+state 150
+
+   15 dist_argument: KW_SET KW_NAMES '=' '(' . dist_name_list ':' dist_name_list ')' ';'
+
+    TOK_ID  shift, and go to state 168
+
+    dist_name_list  go to state 169
+
+
+state 151
+
+   14 dist_argument: KW_SET KW_TYPES '=' '(' . dist_type_list ')' ';'
+
+    KW_INT      shift, and go to state 170
+    KW_VARCHAR  shift, and go to state 171
+    KW_DECIMAL  shift, and go to state 172
+
+    $default  reduce using rule 19 (dist_type_list)
+
+    dist_type       go to state 173
+    dist_type_list  go to state 174
+
+
+state 152
+
+   13 dist_argument: KW_SET KW_WEIGHTS '=' TOK_INT . ';'
+
+    ';'  shift, and go to state 175
+
+
+state 153
+
+   27 dist_value: TOK_INT .
+
+    $default  reduce using rule 27 (dist_value)
+
+
+state 154
+
+   28 dist_value: TOK_LITERAL .
+
+    $default  reduce using rule 28 (dist_value)
+
+
+state 155
+
+   29 dist_value: TOK_DECIMAL .
+
+    $default  reduce using rule 29 (dist_value)
+
+
+state 156
+
+   30 dist_value_list: dist_value .
+
+    $default  reduce using rule 30 (dist_value_list)
+
+
+state 157
+
+   26 dist_member: KW_ADD '(' dist_value_list . ':' dist_weight_list ')' ';'
+   31 dist_value_list: dist_value_list . ',' dist_value
+
+    ':'  shift, and go to state 176
+    ','  shift, and go to state 177
+
+
+state 158
+
+   55 function_call: KW_RANGE '(' expr ',' TOK_INT . ')'
+
+    ')'  shift, and go to state 178
+
+
+state 159
+
+   78 replacement: '{' TOK_LITERAL ',' . TOK_INT '}'
+
+    TOK_INT  shift, and go to state 179
+
+
+state 160
+
+   77 replacement_list: replacement_list ',' replacement .
+
+    $default  reduce using rule 77 (replacement_list)
+
+
+state 161
+
+   54 function_call: KW_LIST '(' expr ',' TOK_INT . ')'
+
+    ')'  shift, and go to state 180
+
+
+state 162
+
+   51 function_call: KW_ROWCOUNT '(' TOK_LITERAL ',' TOK_LITERAL . ')'
+
+    ')'  shift, and go to state 181
+
+
+state 163
+
+   53 function_call: KW_ULIST '(' expr ',' TOK_INT . ')'
+
+    ')'  shift, and go to state 182
+
+
+state 164
+
+   43 expr: '[' TOK_ID TOK_INT opt_substitution_suffix ']' .
+
+    $default  reduce using rule 43 (expr)
+
+
+state 165
+
+   37 comma_expr_list: comma_expr_list ',' expr .
+   56 arithmetic_expr: expr . '+' expr
+   57                | expr . '-' expr
+   58                | expr . '*' expr
+   59                | expr . '/' expr
+
+    '+'  shift, and go to state 94
+    '-'  shift, and go to state 95
+    '*'  shift, and go to state 96
+    '/'  shift, and go to state 97
+
+    $default  reduce using rule 37 (comma_expr_list)
+
+
+state 166
+
+   63 dist_expr_list: dist_expr_list ',' TOK_ID .
+
+    $default  reduce using rule 63 (dist_expr_list)
+
+
+state 167
+
+   56 arithmetic_expr: expr . '+' expr
+   57                | expr . '-' expr
+   58                | expr . '*' expr
+   59                | expr . '/' expr
+   62 dist_expr_list: dist_expr_list ',' expr .
+
+    '+'  shift, and go to state 94
+    '-'  shift, and go to state 95
+    '*'  shift, and go to state 96
+    '/'  shift, and go to state 97
+
+    $default  reduce using rule 62 (dist_expr_list)
+
+
+state 168
+
+   22 dist_name_list: TOK_ID .
+
+    $default  reduce using rule 22 (dist_name_list)
+
+
+state 169
+
+   15 dist_argument: KW_SET KW_NAMES '=' '(' dist_name_list . ':' dist_name_list ')' ';'
+   23 dist_name_list: dist_name_list . ',' TOK_ID
+
+    ':'  shift, and go to state 183
+    ','  shift, and go to state 184
+
+
+state 170
+
+   16 dist_type: KW_INT .
+
+    $default  reduce using rule 16 (dist_type)
+
+
+state 171
+
+   17 dist_type: KW_VARCHAR .
+
+    $default  reduce using rule 17 (dist_type)
+
+
+state 172
+
+   18 dist_type: KW_DECIMAL .
+
+    $default  reduce using rule 18 (dist_type)
+
+
+state 173
+
+   20 dist_type_list: dist_type .
+
+    $default  reduce using rule 20 (dist_type_list)
+
+
+state 174
+
+   14 dist_argument: KW_SET KW_TYPES '=' '(' dist_type_list . ')' ';'
+   21 dist_type_list: dist_type_list . ',' dist_type
+
+    ')'  shift, and go to state 185
+    ','  shift, and go to state 186
+
+
+state 175
+
+   13 dist_argument: KW_SET KW_WEIGHTS '=' TOK_INT ';' .
+
+    $default  reduce using rule 13 (dist_argument)
+
+
+state 176
+
+   26 dist_member: KW_ADD '(' dist_value_list ':' . dist_weight_list ')' ';'
+
+    TOK_INT      shift, and go to state 187
+    TOK_LITERAL  shift, and go to state 154
+    TOK_DECIMAL  shift, and go to state 155
+
+    dist_value        go to state 156
+    dist_value_list   go to state 188
+    dist_weight_list  go to state 189
+
+
+state 177
+
+   31 dist_value_list: dist_value_list ',' . dist_value
+
+    TOK_INT      shift, and go to state 153
+    TOK_LITERAL  shift, and go to state 154
+    TOK_DECIMAL  shift, and go to state 155
+
+    dist_value  go to state 190
+
+
+state 178
+
+   55 function_call: KW_RANGE '(' expr ',' TOK_INT ')' .
+
+    $default  reduce using rule 55 (function_call)
+
+
+state 179
+
+   78 replacement: '{' TOK_LITERAL ',' TOK_INT . '}'
+
+    '}'  shift, and go to state 191
+
+
+state 180
+
+   54 function_call: KW_LIST '(' expr ',' TOK_INT ')' .
+
+    $default  reduce using rule 54 (function_call)
+
+
+state 181
+
+   51 function_call: KW_ROWCOUNT '(' TOK_LITERAL ',' TOK_LITERAL ')' .
+
+    $default  reduce using rule 51 (function_call)
+
+
+state 182
+
+   53 function_call: KW_ULIST '(' expr ',' TOK_INT ')' .
+
+    $default  reduce using rule 53 (function_call)
+
+
+state 183
+
+   15 dist_argument: KW_SET KW_NAMES '=' '(' dist_name_list ':' . dist_name_list ')' ';'
+
+    TOK_ID  shift, and go to state 168
+
+    dist_name_list  go to state 192
+
+
+state 184
+
+   23 dist_name_list: dist_name_list ',' . TOK_ID
+
+    TOK_ID  shift, and go to state 193
+
+
+state 185
+
+   14 dist_argument: KW_SET KW_TYPES '=' '(' dist_type_list ')' . ';'
+
+    ';'  shift, and go to state 194
+
+
+state 186
+
+   21 dist_type_list: dist_type_list ',' . dist_type
+
+    KW_INT      shift, and go to state 170
+    KW_VARCHAR  shift, and go to state 171
+    KW_DECIMAL  shift, and go to state 172
+
+    dist_type  go to state 195
+
+
+state 187
+
+   27 dist_value: TOK_INT .
+   32 dist_weight_list: TOK_INT .
+
+    ')'       reduce using rule 32 (dist_weight_list)
+    $default  reduce using rule 27 (dist_value)
+
+
+state 188
+
+   31 dist_value_list: dist_value_list . ',' dist_value
+   33 dist_weight_list: dist_value_list . ',' TOK_INT
+
+    ','  shift, and go to state 196
+
+
+state 189
+
+   26 dist_member: KW_ADD '(' dist_value_list ':' dist_weight_list . ')' ';'
+
+    ')'  shift, and go to state 197
+
+
+state 190
+
+   31 dist_value_list: dist_value_list ',' dist_value .
+
+    $default  reduce using rule 31 (dist_value_list)
+
+
+state 191
+
+   78 replacement: '{' TOK_LITERAL ',' TOK_INT '}' .
+
+    $default  reduce using rule 78 (replacement)
+
+
+state 192
+
+   15 dist_argument: KW_SET KW_NAMES '=' '(' dist_name_list ':' dist_name_list . ')' ';'
+   23 dist_name_list: dist_name_list . ',' TOK_ID
+
+    ')'  shift, and go to state 198
+    ','  shift, and go to state 184
+
+
+state 193
+
+   23 dist_name_list: dist_name_list ',' TOK_ID .
+
+    $default  reduce using rule 23 (dist_name_list)
+
+
+state 194
+
+   14 dist_argument: KW_SET KW_TYPES '=' '(' dist_type_list ')' ';' .
+
+    $default  reduce using rule 14 (dist_argument)
+
+
+state 195
+
+   21 dist_type_list: dist_type_list ',' dist_type .
+
+    $default  reduce using rule 21 (dist_type_list)
+
+
+state 196
+
+   31 dist_value_list: dist_value_list ',' . dist_value
+   33 dist_weight_list: dist_value_list ',' . TOK_INT
+
+    TOK_INT      shift, and go to state 199
+    TOK_LITERAL  shift, and go to state 154
+    TOK_DECIMAL  shift, and go to state 155
+
+    dist_value  go to state 190
+
+
+state 197
+
+   26 dist_member: KW_ADD '(' dist_value_list ':' dist_weight_list ')' . ';'
+
+    ';'  shift, and go to state 200
+
+
+state 198
+
+   15 dist_argument: KW_SET KW_NAMES '=' '(' dist_name_list ':' dist_name_list ')' . ';'
+
+    ';'  shift, and go to state 201
+
+
+state 199
+
+   27 dist_value: TOK_INT .
+   33 dist_weight_list: dist_value_list ',' TOK_INT .
+
+    ')'       reduce using rule 33 (dist_weight_list)
+    $default  reduce using rule 27 (dist_value)
+
+
+state 200
+
+   26 dist_member: KW_ADD '(' dist_value_list ':' dist_weight_list ')' ';' .
+
+    $default  reduce using rule 26 (dist_member)
+
+
+state 201
+
+   15 dist_argument: KW_SET KW_NAMES '=' '(' dist_name_list ':' dist_name_list ')' ';' .
+
+    $default  reduce using rule 15 (dist_argument)
