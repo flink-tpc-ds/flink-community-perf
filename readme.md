@@ -20,11 +20,11 @@ Flink团队提供用于比赛的[Flink分支](https://github.com/flink-tpc-ds/fl
 5.组委会保留对赛题修改的权利。
 
 ## 3.比赛流程
-1.选手从[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf) 获取query。
+1.选手从[Flink分支](https://github.com/flink-tpc-ds/flink/tree/tpcds-master)拉取Flink代码进行优化。
 
-2.选手通过[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf) 生成测试数据，建议利用将数据转换成parquet格式以获取更好的性能。
+2.选手从[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf) 获取query。
 
-3.选手从[Flink分支](https://github.com/flink-tpc-ds/flink/tree/tpcds-master)拉取Flink代码进行优化。
+3.选手通过[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf) 生成测试数据，建议利用将数据转换成parquet格式以获取更好的性能。
 
 4.本地利用[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf)评测优化效果。
 
