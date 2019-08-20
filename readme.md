@@ -24,7 +24,7 @@ Flink团队提供用于比赛的[Flink分支](https://github.com/flink-tpc-ds/fl
 
 2.选手从[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf) 获取query。
 
-3.选手通过[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf) 生成测试数据，建议利用将数据转换成parquet格式以获取更好的性能。
+3.选手通过[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf) 生成测试数据，建议利用[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf)将数据转换成parquet格式以获取更好的性能。
 
 4.本地利用[Benchmark工具](https://github.com/flink-tpc-ds/flink-community-perf)评测优化效果。
 
@@ -110,6 +110,7 @@ SF1包含两个测试SQL,SF100包含全量99个SQL
 
 (2) 优化
 也是比赛最主要的部分， 优化Flink代码和配置，包含但不限于以下模块：
+    
     SQL 优化，优化出更合理的SQL执行Plan。
     算子优化， 优化出更高效的SQL执行算子。
     引擎优化， 优化调度，数据传输等等，可以让作业执行更快速。
@@ -161,8 +162,8 @@ Intellij 截图:
 运行所有 sql 作业,设置数据集大小为 1G, 执行次数为 3，测试数据格式为parquet,运行参数如下:
 ```
 --sqlQueries all
---numIters 1
---scaleFactor 3
+--numIters 3
+--scaleFactor 1
 --dataLocation /home/hadoop/flink-community-perf/resource/tpcds/datagen/data/SF1
 --sqlLocation  /home/hadoop/flink-community-perf/resource/tpcds/querygen/queries/SF1  
 --sqlType tpcds 
