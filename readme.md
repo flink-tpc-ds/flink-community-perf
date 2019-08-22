@@ -254,6 +254,10 @@ sh runBenchmark.sh all 1 SF=100
     # ---:parquet Sink Source依赖，使用parquet时需要引入---
     tar --exclude=flink-1.9-tpcds-master/opt/ -zcvf flink-1.9-tpcds-master.tar.gz   flink-1.9-tpcds-master/  
     upload your flink-1.10-SNAPSHOT.tar.gz to Tanchi 
+    
+    
+    # zip打包：zip -v -r flink-1.9-tpcds-master.zip flink-1.9-tpcds-master/ -x  \*flink-1.9-tpcds-master/opt\*  
+      
 ```
 
 ### 5.格式转换工具
