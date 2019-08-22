@@ -62,4 +62,4 @@ mainClass=com.alibaba.flink.benchmark.tools.CsvToParquet
 
 echo $FLINK_CLASSPATH
 
-${flinkDir}/bin/flink run -libjars $jarFile -c $mainClass $jarFile --dataLocation $dataLocation  --scaleFactor $scaleFactor --sqlType $sqlType --compressionCodec $compressionCodec
+${flinkDir}/bin/flink run -c $mainClass $jarFile --dataLocation $dataLocation  --scaleFactor $scaleFactor --sqlType $sqlType --compressionCodec $compressionCodec
