@@ -222,6 +222,9 @@ You can organize these arguments according your requirements.
      # ---:parquet Sink Source dependencies，copy here when using parquet---
     tar --exclude=flink-1.9-tpcds-master/opt/ -zcvf flink-1.9-tpcds-master.tar.gz   flink-1.9-tpcds-master/  
     upload your flink-1.10-SNAPSHOT.tar.gz to Tanchi 
+       
+     # zip format：zip -v -r flink-1.9-tpcds-master.zip flink-1.9-tpcds-master/ -x  \*flink-1.9-tpcds-master/opt\*  
+
 ```
 
 ### 5.Data format convert
