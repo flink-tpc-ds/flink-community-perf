@@ -221,7 +221,7 @@ You can organize these arguments according your requirements.
         cp ~/.m2/repository/org/apache/flink/flink-shaded-hadoop-2-uber/2.4.1-7.0/flink-shaded-hadoop-2-uber-2.4.1-7.0.jar ./lib/
      # ---:parquet Sink Source dependencies，copy here when using parquet---
     tar --exclude=flink-1.9-tpcds-master/opt/ -zcvf flink-1.9-tpcds-master.tar.gz   flink-1.9-tpcds-master/  
-    upload your flink-1.10-SNAPSHOT.tar.gz to Tanchi 
+    upload your flink-1.9-tpcds-master.tar.gz to Tanchi 
        
      # zip format：zip -v -r flink-1.9-tpcds-master.zip flink-1.9-tpcds-master/ -x  \*flink-1.9-tpcds-master/opt\*  
 

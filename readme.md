@@ -265,7 +265,7 @@ sh runBenchmark.sh all 1 SF=100
     cp ~/.m2/repository/org/apache/flink/flink-shaded-hadoop-2-uber/2.4.1-7.0/flink-shaded-hadoop-2-uber-2.4.1-7.0.jar ./lib/
     # ---:parquet Sink Source依赖，使用parquet时需要引入---
     tar --exclude=flink-1.9-tpcds-master/opt/ -zcvf flink-1.9-tpcds-master.tar.gz   flink-1.9-tpcds-master/  
-    upload your flink-1.10-SNAPSHOT.tar.gz to Tanchi 
+    上传刚刚压缩的flink-1.9-tpcds-master.tar.gz到天池进行测评
     
     
     # zip打包：zip -v -r flink-1.9-tpcds-master.zip flink-1.9-tpcds-master/ -x  \*flink-1.9-tpcds-master/opt\*  
