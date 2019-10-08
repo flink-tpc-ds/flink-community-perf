@@ -209,7 +209,7 @@ You can organize these arguments according your requirements.
 ### 4.Submit your Flink  binary file to Tianchi Website
 (1) Build tar.gz file, Note: please exclude opt/* files to decrease the file size, opt/* files will not be used in the competition
 ```  
-    cd your/flink/flink-target/flink-dist/target/flink-1.9-tpcds-master-bin 
+    cd your/flink/flink-dist/target/flink-1.9-tpcds-master-bin 
      # ---:parquet Sink Source dependencies，copy here when using parquet---
         cp ~/.m2/repository/org/apache/parquet/parquet-column/1.8.2/parquet-column-1.8.2.jar ./lib/
         cp ~/.m2/repository/org/apache/parquet/parquet-hadoop/1.8.2/parquet-hadoop-1.8.2.jar ./lib/

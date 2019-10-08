@@ -181,7 +181,7 @@ Intellij 截图:
 
 (1) 比赛使用standalone集群,命令如下:
 ```
-  cd /home/hadoop/flink/flink-target/flink-dist/target/flink-1.9-tpcds-master-bin 
+  cd /home/hadoop/flink/flink-dist/target/flink-1.9-tpcds-master-bin 
   # ---:parquet Sink Source dependencies，copy here when using parquet---
          cp ~/.m2/repository/org/apache/parquet/parquet-column/1.8.2/parquet-column-1.8.2.jar ./lib/
          cp ~/.m2/repository/org/apache/parquet/parquet-hadoop/1.8.2/parquet-hadoop-1.8.2.jar ./lib/
@@ -253,7 +253,7 @@ sh runBenchmark.sh all 1 SF=100
 ### 4.提交作业至天池平台
 (1) 代码优化完成后，打包提交到天池平台，打包命令如下：
 ```  
-    cd /home/hadoop/flink/flink-target/flink-dist/target/flink-1.9-tpcds-master-bin 
+    cd /home/hadoop/flink/flink-dist/target/flink-1.9-tpcds-master-bin 
     # ---:parquet Sink Source依赖，使用parquet时需要引入---
     cp ~/.m2/repository/org/apache/parquet/parquet-column/1.8.2/parquet-column-1.8.2.jar ./lib/
     cp ~/.m2/repository/org/apache/parquet/parquet-hadoop/1.8.2/parquet-hadoop-1.8.2.jar ./lib/
