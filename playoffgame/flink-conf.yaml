@@ -25,9 +25,9 @@
 # The heap size for the JobManager JVM
 jobmanager.heap.size: 8g
 # The heap size for the TaskManager JVM
-taskmanager.heap.size: 230g
+taskmanager.heap.size: 225g
 # The number of task slots that each TaskManager offers. Each slot runs one parallel pipeline.
-taskmanager.numberOfTaskSlots: 230
+taskmanager.numberOfTaskSlots: 225
 ##------ 复赛默认配置，请勿修改，修改后算作无效成绩！-------##
 
 ##------- 建议配置（不配必挂） -------##
