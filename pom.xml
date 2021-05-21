@@ -12,7 +12,7 @@
         <scala.macros.version>2.1.0</scala.macros.version>
         <scala.version>2.11.11</scala.version>
         <scala.binary.version>2.11</scala.binary.version>
-        <runtime.version>1.9-tpcds-master</runtime.version>
+        <runtime.version>1.9.2</runtime.version>
         <!--<dependency.scope>compile</dependency.scope>-->
         <dependency.scope>provided</dependency.scope>
     </properties>
